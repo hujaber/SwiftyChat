@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		277766B5256BEDF6004F41A7 /* ExampleChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277766B4256BEDF6004F41A7 /* ExampleChatViewController.swift */; };
 		D72143C82344C82600F616F3 /* SwiftyChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D72143BE2344C82500F616F3 /* SwiftyChat.framework */; };
 		D72143CD2344C82600F616F3 /* SwiftyChatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D72143CC2344C82600F616F3 /* SwiftyChatTests.swift */; };
 		D72143CF2344C82600F616F3 /* SwiftyChat.h in Headers */ = {isa = PBXBuildFile; fileRef = D72143C12344C82500F616F3 /* SwiftyChat.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -63,6 +64,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		277766B4256BEDF6004F41A7 /* ExampleChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleChatViewController.swift; sourceTree = "<group>"; };
 		D72143BE2344C82500F616F3 /* SwiftyChat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyChat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D72143C12344C82500F616F3 /* SwiftyChat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftyChat.h; sourceTree = "<group>"; };
 		D72143C22344C82500F616F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 			isa = PBXGroup;
 			children = (
 				D72143E62344C88D00F616F3 /* AppDelegate.swift */,
+				277766B4256BEDF6004F41A7 /* ExampleChatViewController.swift */,
 				D72143EF2344C88F00F616F3 /* Assets.xcassets */,
 				D72143F12344C88F00F616F3 /* LaunchScreen.storyboard */,
 				D72143F42344C88F00F616F3 /* Info.plist */,
@@ -387,6 +390,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D72143E72344C88D00F616F3 /* AppDelegate.swift in Sources */,
+				277766B5256BEDF6004F41A7 /* ExampleChatViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

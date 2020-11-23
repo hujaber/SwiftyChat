@@ -8,10 +8,14 @@
 
 import UIKit
 
-struct Message {
+public struct Message {
     var text: String
     var isSender: Bool
-    var isProperty: Bool = false
+    
+    public init(text: String, isSender: Bool) {
+        self.text = text
+        self.isSender = isSender
+    }
 }
 
 /// Defines the style of the controllers UI elements
@@ -121,21 +125,11 @@ open class ChatViewController: UIViewController {
         return button
     }()
     
-    var messages: [Message] = [Message(text: "Hello", isSender: true),
-                               Message(text: "Hi", isSender: false) ,
-                               .init(text: "I'm interested in your property", isSender: true),
-                               .init(text: "So?", isSender: false),
-                               
-                               .init(text: "Alright, sounds great", isSender: true),
-                               .init(text: "See you tomorrow, bye", isSender: false),
-                               .init(text: "Bye", isSender: true),
-                               .init(text: "Property", isSender: false, isProperty: true),
-                               .init(text: "Oooo", isSender: true, isProperty: true)
-    ]
+    var messages: [Message] = []
     
     open var chatFieldPlaceholderText: String = "Type in your message"
         
-    override public func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
         startObservingKeyboard()
         view.backgroundColor = .white
@@ -178,10 +172,10 @@ open class ChatViewController: UIViewController {
                            forCellReuseIdentifier: IncomingCell.identifier)
         tableView.register(OutgoingCell.self,
                            forCellReuseIdentifier: OutgoingCell.identifier)
-        tableView.register(IncomingSharedPropertyCell.self,
-                           forCellReuseIdentifier: IncomingSharedPropertyCell.identifier)
-        tableView.register(OutgoingSharedProperty.self,
-                           forCellReuseIdentifier: OutgoingSharedProperty.identifier)
+//        tableView.register(IncomingSharedPropertyCell.self,
+//                           forCellReuseIdentifier: IncomingSharedPropertyCell.identifier)
+//        tableView.register(OutgoingSharedProperty.self,
+//                           forCellReuseIdentifier: OutgoingSharedProperty.identifier)
     }
     
     /// Setup the lower area of the view
@@ -240,11 +234,15 @@ open class ChatViewController: UIViewController {
     @objc
     public func didTapSend() {
         if chatTextView.containsAtLeastACharacter, let text = chatTextView.text, text != self.chatFieldPlaceholderText {
-            messages.append(.init(text: chatTextView.text, isSender: true))
-            tableView.insertRows(at: [IndexPath(row: messages.count - 1, section: 0)], with: .fade)
-            scrollTableViewToLastRow()
+            addMessage(.init(text: chatTextView.text, isSender: true))
             chatTextView.text = ""
         }
+    }
+    
+    public func addMessage(_ message: Message) {
+        messages.append(message)
+        tableView.insertRows(at: [.init(row: messages.count - 1, section: 0)], with: .automatic)
+        scrollTableViewToLastRow()
     }
     
     /// Scrolls table view to last row according to items in messages array
@@ -329,24 +327,13 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
         let message = messages[indexPath.row]
         
         if message.isSender {
-            if message.isProperty {
-                let cell = tableView.dequeueReusableCell(withIdentifier: OutgoingSharedProperty.identifier, for: indexPath) as! OutgoingSharedProperty
-                return cell
-            } else {
-                let cell = tableView.dequeueReusableCell(withIdentifier: OutgoingCell.identifier, for: indexPath) as! OutgoingCell
-                cell.setup(text: message.text)
-                return cell
-            }
-            
+            let cell = tableView.dequeueReusableCell(withIdentifier: OutgoingCell.identifier, for: indexPath) as! OutgoingCell
+            cell.setup(text: message.text)
+            return cell
         } else {
-            if message.isProperty {
-                let cell = tableView.dequeueReusableCell(withIdentifier: IncomingSharedPropertyCell.identifier, for: indexPath) as! IncomingSharedPropertyCell
-                return cell
-            } else {
-                let cell = tableView.dequeueReusableCell(withIdentifier: IncomingCell.identifier, for: indexPath) as! IncomingCell
-                cell.setup(text: messages[indexPath.row].text)
-                return cell
-            }
+            let cell = tableView.dequeueReusableCell(withIdentifier: IncomingCell.identifier, for: indexPath) as! IncomingCell
+            cell.setup(text: messages[indexPath.row].text)
+            return cell
         }
         
     }
