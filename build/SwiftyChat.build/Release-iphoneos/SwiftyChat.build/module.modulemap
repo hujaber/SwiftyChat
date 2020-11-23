@@ -1,0 +1,11 @@
+framework module SwiftyChat {
+  umbrella header "SwiftyChat.h"
+
+  export *
+  module * { export * }
+}
+
+module SwiftyChat.Swift {
+    header "SwiftyChat-Swift.h"
+    requires objc
+}

@@ -1,0 +1,7 @@
+version: "Apple Swift version 5.1 (swiftlang-1100.0.270.13 clang-1100.0.33.7)"
+options: "f3d49298b3966902a3615394d3fa2e99"
+build_time: [1570088664, 308293000]
+inputs:
+  "/Users/Hussein/iOS Projects/SwiftyChat/SwiftyChat/IncomingCell.swift": [9223372036, 854775807]
+  "/Users/Hussein/iOS Projects/SwiftyChat/SwiftyChat/SharedPropertyCell.swift": [9223372036, 854775807]
+  "/Users/Hussein/iOS Projects/SwiftyChat/SwiftyChat/ChatController.swift": [9223372036, 854775807]

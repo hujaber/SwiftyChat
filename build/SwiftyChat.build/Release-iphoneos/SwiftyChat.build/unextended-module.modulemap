@@ -1,0 +1,10 @@
+framework module SwiftyChat {
+  umbrella header "SwiftyChat.h"
+
+  export *
+  module * { export * }
+}
+
+module SwiftyChat.__Swift {
+    exclude header "SwiftyChat-Swift.h"
+}
