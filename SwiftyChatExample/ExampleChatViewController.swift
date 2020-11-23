@@ -27,8 +27,11 @@ class ExampleChatViewController: ChatViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.style.textAreaBackgroundColor = .red
+        self.style.textAreaBackgroundColor = .cyan
         getMessagesFromServer()
+        self.options.hideKeyboardOnScroll = false
+        self.style.textFieldRoundedCornerRadius = 10
+        style.sendButtonTitle = "Send me!"
     }
     
     private func getMessagesFromServer() {
@@ -36,8 +39,6 @@ class ExampleChatViewController: ChatViewController {
             for message in messages {
                 self?.addMessage(message)
             }
-
         }
     }
-   
 }

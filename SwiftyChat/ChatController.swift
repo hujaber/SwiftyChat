@@ -48,6 +48,11 @@ public struct ChatStyle {
     // Send Button
     public var buttonImage: UIImage? = UIImage(named: "sendButton", in: Bundle(for: ChatViewController.self), compatibleWith: nil)
     
+    /// The buttons title, in case a title is set, the image will disappear
+    public var sendButtonTitle: String? = nil
+    
+    public var textFieldRoundedCornerRadius: CGFloat? = nil
+    
     public init() {}
 }
 
@@ -67,7 +72,11 @@ public struct ChatOptions {
 open class ChatViewController: UIViewController {
     
     /// Chat controller style
-    open var style: ChatStyle = .init()
+    open var style: ChatStyle = .init() {
+        didSet {
+            updateStyle()
+        }
+    }
     /// Chat controller options
     public var options: ChatOptions = .init()
     
@@ -102,6 +111,9 @@ open class ChatViewController: UIViewController {
         tf.font = self.style.textViewFont
         tf.isScrollEnabled = false
         tf.delegate = self
+        if let cornerRadius = self.style.textFieldRoundedCornerRadius {
+            tf.layer.cornerRadius = cornerRadius
+        }
         return tf
     }()
     
@@ -118,10 +130,15 @@ open class ChatViewController: UIViewController {
     /// The button used to trigger the 'send message' action
     private lazy var sendButton: UIButton = {
         let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(self.style.buttonImage, for: .normal)
-        button.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        if let buttonTitle = style.sendButtonTitle {
+            button.setTitle(buttonTitle, for: .normal)
+        } else if let image = style.buttonImage {
+            button.setImage(image, for: .normal)
+        } else {
+            button.setTitle("Send", for: .normal)
+        }
         button.addTarget(self, action: #selector(didTapSend), for: .touchUpInside)
+        button.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return button
     }()
     
@@ -133,6 +150,11 @@ open class ChatViewController: UIViewController {
         super.viewDidLoad()
         startObservingKeyboard()
         view.backgroundColor = .white
+    }
+    
+    open override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        sendButton.widthAnchor.constraint(equalToConstant: sendButton.intrinsicContentSize.width).isActive = true
     }
     
     override public func viewWillAppear(_ animated: Bool) {
@@ -167,15 +189,11 @@ open class ChatViewController: UIViewController {
     }
     
     /// Register cells to tableview
-    public func registerCells() {
+    open func registerCells() {
         tableView.register(IncomingCell.self,
                            forCellReuseIdentifier: IncomingCell.identifier)
         tableView.register(OutgoingCell.self,
                            forCellReuseIdentifier: OutgoingCell.identifier)
-//        tableView.register(IncomingSharedPropertyCell.self,
-//                           forCellReuseIdentifier: IncomingSharedPropertyCell.identifier)
-//        tableView.register(OutgoingSharedProperty.self,
-//                           forCellReuseIdentifier: OutgoingSharedProperty.identifier)
     }
     
     /// Setup the lower area of the view
@@ -223,6 +241,27 @@ open class ChatViewController: UIViewController {
         ])
     }
     
+    
+    /// Updates the new set options
+    private func updateStyle() {
+        chatTextView.font = style.textViewFont
+        chatTextView.tintColor = style.textViewTintColor
+        tableView.contentInset = self.style.tableContentInset
+        tableView.tableFooterView = style.tableFooterView
+        textAreaBackground.backgroundColor = style.textAreaBackgroundColor
+        stackView.spacing = style.stackViewSpacing
+        if let buttonTitle = style.sendButtonTitle {
+            sendButton.setTitle(buttonTitle, for: .normal)
+            sendButton.setImage(nil, for: .normal)
+        } else if let buttonImage = style.buttonImage {
+            sendButton.setImage(buttonImage, for: .normal)
+            sendButton.setTitle(nil, for: .normal)
+        } else {
+            sendButton.setTitle("Send", for: .normal)
+        }
+        chatTextView.layer.cornerRadius = style.textFieldRoundedCornerRadius ?? 0.0
+        view.backgroundColor = style.textAreaBackgroundColor
+    }
     
     /// Hide keyboard
     @objc
@@ -339,7 +378,9 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        self.view.endEditing(true)
+        if options.hideKeyboardOnScroll {
+            self.view.endEditing(true)
+        }
     }
     
 }
