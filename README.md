@@ -1,6 +1,12 @@
 # SwiftyChat
 A chat controller written in Swift
 
+# Installation
+
+```
+pod 'SwiftyChat'
+```
+
 # Usage
 1. Import SwiftyChat
 2. Create a new view controller and make it a subclass of ChatViewController
