@@ -21,8 +21,7 @@ public struct ChatStyle {
     public var textViewFont: UIFont = .systemFont(ofSize: 17, weight: .bold)
     
     /// Tint color (mainly to specify the cursor color)
-    #warning("Fix color issues, systemRed is not supported by iOS < 13")
-    public var textViewTintColor: UIColor = .systemRed
+    public var textViewTintColor: UIColor = .red
     
     /// Placeholder text color
     public var placeholderTextColor: UIColor = .lightGray
@@ -133,15 +132,13 @@ open class ChatViewController: UIViewController {
                                .init(text: "Property", isSender: false, isProperty: true),
                                .init(text: "Oooo", isSender: true, isProperty: true)
     ]
+    
+    open var chatFieldPlaceholderText: String = "Type in your message"
         
     override public func viewDidLoad() {
         super.viewDidLoad()
         startObservingKeyboard()
-        if #available(iOS 13.0, *) {
-            view.backgroundColor = .systemBackground
-        } else {
-            view.backgroundColor = .white
-        }
+        view.backgroundColor = .white
     }
     
     override public func viewWillAppear(_ animated: Bool) {
@@ -242,10 +239,11 @@ open class ChatViewController: UIViewController {
     /// Action triggered when 'Send' button gets tapped
     @objc
     public func didTapSend() {
-        if chatTextView.containsAtLeastACharacter {
+        if chatTextView.containsAtLeastACharacter, let text = chatTextView.text, text != self.chatFieldPlaceholderText {
             messages.append(.init(text: chatTextView.text, isSender: true))
             tableView.insertRows(at: [IndexPath(row: messages.count - 1, section: 0)], with: .fade)
             scrollTableViewToLastRow()
+            chatTextView.text = ""
         }
     }
     
@@ -259,15 +257,15 @@ open class ChatViewController: UIViewController {
     
     /// Remove observers to avoid memory leaks
     deinit {
-      let notificationCenter = NotificationCenter.default
-      notificationCenter.removeObserver(
-        self,
-        name: UIResponder.keyboardWillShowNotification,
-        object: nil)
-      notificationCenter.removeObserver(
-        self,
-        name: UIResponder.keyboardWillHideNotification,
-        object: nil)
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.removeObserver(
+            self,
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil)
+        notificationCenter.removeObserver(
+            self,
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil)
     }
     
     /// Adds observers to changes in keyboard show/hide flags
@@ -362,8 +360,8 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
 extension ChatViewController: UITextViewDelegate {
     
     /// Changes color of textview text to appear like a placeholder.
-    public func addPlaceHolderText(text: String = "Type in your message") {
-        chatTextView.text = text
+    public func addPlaceHolderText() {
+        chatTextView.text = self.chatFieldPlaceholderText
         chatTextView.textColor = style.placeholderTextColor
     }
     
