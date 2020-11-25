@@ -11,6 +11,7 @@ import UIKit
 public struct Message {
     var text: String
     var isSender: Bool
+    var dateString: String?
     
     public init(text: String, isSender: Bool) {
         self.text = text
@@ -52,6 +53,20 @@ public struct ChatStyle {
     public var sendButtonTitle: String? = nil
     
     public var textFieldRoundedCornerRadius: CGFloat? = nil
+    
+    /// Background color of incoming message bubble
+    public var incomingMessageColor: UIColor? = nil
+    
+    /// Background color of outgoing message bubble
+    public var outgoingMessageColor: UIColor? = nil
+    
+    /// Incoming message text color
+    public var incomingMessageTextColor: UIColor? = nil
+    
+    /// Outgoung message text color
+    public var outgoingMessageTextColor: UIColor? = nil
+    
+    public var chatAreaTextColor: UIColor? = nil
     
     public init() {}
 }
@@ -261,6 +276,9 @@ open class ChatViewController: UIViewController {
         }
         chatTextView.layer.cornerRadius = style.textFieldRoundedCornerRadius ?? 0.0
         view.backgroundColor = style.textAreaBackgroundColor
+        if let textColor = style.chatAreaTextColor {
+            chatTextView.textColor = textColor
+        }
     }
     
     /// Hide keyboard
@@ -367,11 +385,23 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
         
         if message.isSender {
             let cell = tableView.dequeueReusableCell(withIdentifier: OutgoingCell.identifier, for: indexPath) as! OutgoingCell
-            cell.setup(text: message.text)
+            cell.setupWithMessage(message)
+            if let outgoingColor = style.outgoingMessageColor {
+                cell.bubbleBackgroundColor = outgoingColor
+            }
+            if let outgoingTextColor = style.outgoingMessageTextColor {
+                cell.chatTextColor = outgoingTextColor
+            }
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: IncomingCell.identifier, for: indexPath) as! IncomingCell
-            cell.setup(text: messages[indexPath.row].text)
+            cell.setupWithMessage(messages[indexPath.row])
+            if let outgoingColor = style.incomingMessageColor {
+                cell.bubbleBackgroundColor = outgoingColor
+            }
+            if let incomingTextColor = style.incomingMessageTextColor {
+                cell.chatTextColor = incomingTextColor
+            }
             return cell
         }
         
@@ -395,11 +425,16 @@ extension ChatViewController: UITextViewDelegate {
     
     public func removePlaceholderText() {
         self.chatTextView.text = nil
-        if #available(iOS 13.0, *) {
-            self.chatTextView.textColor = .label
+        if let textColor = style.chatAreaTextColor {
+            chatTextView.textColor = textColor
         } else {
-            self.chatTextView.textColor = .black
+            if #available(iOS 13.0, *) {
+                self.chatTextView.textColor = .label
+            } else {
+                self.chatTextView.textColor = .black
+            }
         }
+        
     }
     
     public func textViewDidEndEditing(_ textView: UITextView) {

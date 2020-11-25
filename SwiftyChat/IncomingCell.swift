@@ -33,11 +33,17 @@ class IncomingCell: UITableViewCell {
         }
     }
     
+    
+    
     private var currentBundle: Bundle {
         .init(for: Self.self)
     }
     
-    public var chatTextColor: UIColor = .black
+    public var chatTextColor: UIColor = .black {
+        didSet {
+            chatTextLabel.textColor = chatTextColor
+        }
+    }
     
     private let iconImageView = UIImageView()
     private let bubbleImageView = UIImageView()
@@ -154,13 +160,10 @@ class IncomingCell: UITableViewCell {
         ])
     }
     
-    func setup(text: String) {
-        if text.containsOnlyEmoji {
-            chatTextLabel.font = UIFont.systemFont(ofSize: 20, weight: .regular)
-        } else {
-            chatTextLabel.font = .systemFont(ofSize: 17, weight: .regular)
-        }
-        chatTextLabel.text = text
+    
+    func setupWithMessage(_ message: Message) {
+        chatTextLabel.text = message.text
+        timeLabel.text = message.dateString
     }
     
     

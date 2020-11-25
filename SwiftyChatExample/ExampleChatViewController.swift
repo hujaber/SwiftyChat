@@ -32,6 +32,11 @@ class ExampleChatViewController: ChatViewController {
         self.options.hideKeyboardOnScroll = false
         self.style.textFieldRoundedCornerRadius = 10
         style.sendButtonTitle = "Send me!"
+        style.incomingMessageColor = .red
+        style.outgoingMessageColor = .green
+        style.incomingMessageTextColor = .white
+        style.outgoingMessageTextColor = .white
+        style.chatAreaTextColor = .purple
     }
     
     private func getMessagesFromServer() {

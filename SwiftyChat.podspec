@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
 
   spec.name         = "SwiftyChat"
-  spec.version      = "0.1"
+  spec.version      = "0.1.1"
   spec.summary      = "A chat controller written in Swift"
 
   spec.description  = <<-DESC
