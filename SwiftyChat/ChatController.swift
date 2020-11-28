@@ -9,11 +9,11 @@
 import UIKit
 
 public struct Message {
-    var text: String
-    var isSender: Bool
-    var dateString: String?
+    public var text: String
+    public var isSender: Bool
+    public var dateString: String?
     
-    public init(text: String, isSender: Bool) {
+    public init(text: String, isSender: Bool, dateString: String?) {
         self.text = text
         self.isSender = isSender
     }
@@ -289,11 +289,17 @@ open class ChatViewController: UIViewController {
     
     /// Action triggered when 'Send' button gets tapped
     @objc
-    public func didTapSend() {
+    private func didTapSend() {
         if chatTextView.containsAtLeastACharacter, let text = chatTextView.text, text != self.chatFieldPlaceholderText {
-            addMessage(.init(text: chatTextView.text, isSender: true))
+            //addMessage(.init(text: chatTextView.text, isSender: true, dateString: nil))
+            let message = Message(text: text, isSender: true, dateString: nil)
+            sendButtonTapped(withMessage: message)
             chatTextView.text = ""
         }
+    }
+    
+    open func sendButtonTapped(withMessage message: Message) {
+        addMessage(message)
     }
     
     public func addMessage(_ message: Message) {

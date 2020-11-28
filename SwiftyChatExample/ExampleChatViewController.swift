@@ -15,7 +15,7 @@ class FakeApiClient {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             var messages = [Message]()
             for i in 0...4 {
-                let message = Message(text: "Message \(i)", isSender: Bool.random())
+                let message = Message(text: "Message \(i)", isSender: Bool.random(), dateString: nil)
                 messages.append(message)
             }
             completion(messages)
@@ -37,6 +37,14 @@ class ExampleChatViewController: ChatViewController {
         style.incomingMessageTextColor = .white
         style.outgoingMessageTextColor = .white
         style.chatAreaTextColor = .purple
+    }
+    
+
+    
+    override func sendButtonTapped(withMessage message: Message) {
+        var message_ = message
+        message_.dateString = "12-12-2012"
+        super.sendButtonTapped(withMessage: message_)
     }
     
     private func getMessagesFromServer() {
