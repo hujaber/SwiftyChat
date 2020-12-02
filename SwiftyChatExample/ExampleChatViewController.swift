@@ -28,7 +28,7 @@ class ExampleChatViewController: ChatViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.style.textAreaBackgroundColor = .cyan
-        getMessagesFromServer()
+      //  getMessagesFromServer()
         self.options.hideKeyboardOnScroll = false
         self.style.textFieldRoundedCornerRadius = 10
         style.sendButtonTitle = "Send me!"

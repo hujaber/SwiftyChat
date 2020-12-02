@@ -361,7 +361,10 @@ open class ChatViewController: UIViewController {
             animations: {
                 self.textAreaBottomConstraint.constant = -keyboardFrame.height + safeAreaOffset                
                 self.view.layoutIfNeeded()
-                self.tableView.scrollToRow(at: IndexPath(row: self.messages.count - 1, section: 0), at: .top, animated: true)
+                if self.messages.count > 2 {
+                    self.tableView.scrollToRow(at: IndexPath(row: self.messages.count - 1, section: 0), at: .top, animated: true)
+                }
+                
         })
     }
     
